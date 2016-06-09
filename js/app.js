@@ -1,67 +1,93 @@
-var picture = 0;
+// get window height to display photos
+var h = window.innerHeight;
 
-var showPhotos = function(photos) {
-  console.log(photos);
+var getMedia = function(searchTerm, genreLiked) {
+  // initializa SoundCloud client
+  SC.initialize({
+  client_id: '5795b3a3f6ecac359f77f3729597a8bf'
+  });
 
-  var result = $('.image-template').clone();
+  // array to push urls into to then play them all
+  songUrls = [];
 
-  var image = result.find('.shown');
+  // get SoundCloud urls & play them
+  SC.get('/tracks', {
+    q: 'ambient', tags: genreLiked, license: 'cc-by-sa', limit: 7
+  }).then(function(tracks) {
+    // console.log(tracks);
+    $.each(tracks, function() {
+      // console.log(this.permalink_url);
+      songUrls.push(this.permalink_url);
+    })
+    songUrls = String(songUrls);
+    console.log(songUrls);
+    $.stratus({
+    key: "5795b3a3f6ecac359f77f3729597a8bf",
+    links: songUrls,
+    color: '000',
+    stats: false,
+    buying: false,
+    auto_play: true
+  });
+  });
 
-  var url = "https://farm" + photos[0].farm + ".staticflickr.com/" + photos[0].server + "/" + photos[0].id + "_" + photos[0].secret + "_b.jpg";
-  console.log(url);
-
-  image.html('<img src=' + url + '</>');
-
-  return result;
-};
-
-var getMedia = function(searchTerm) {
   // get pictures from Flickr
   var request = {
-    per_page: 25
+    per_page: 50,
+    tags: searchTerm
   };
 
-  // get array of photos by tags
+  // get array of photos by search term tags
   $.ajax({
     type: "GET",
     data: request,
     dataType: 'jsonp',
     contentType: "application/jsonp; charset=utf-8",
-    url: "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=04cdb7e0cab8f9b4b167fa8d5dfa0664&tags=" + searchTerm + "&format=json",
+    url: "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=e56f062c0fc2e0d9d3fe76d5b93045be&text=" + searchTerm + "&format=json",
     jsonpCallback: 'jsonFlickrApi',
     success: function(result) {
-      // console.log(result);
-      // console.log(data.photos.photo[0].farm);
+      var imageLoop = [];
 
-      // var image = "https://farm" + data.photos.photo[0].farm + ".staticflickr.com/" + data.photos.photo[0].server + "/" + data.photos.photo[0].id + "_" + data.photos.photo[0].secret + ".jpg";
-      // $(".image").append("<img src=" + image + ">");
+      $.each(result.photos.photo, function(index, value) {
+        // console.log(value);
 
-      // grab IDs of photos
-      $.each(result.photos, function(index, value) {
-        // console.log(index, value);
-        
-        if (index === "photo") {
-          var photos = value;
-          console.log(value);
-          var stream = showPhotos(photos); 
-        }
-        
-        $('.image-results').append(stream);
+        var url = "<img src='https://farm" + value.farm + ".staticflickr.com/" + value.server + "/" + value.id + "_" + value.secret + "_c.jpg'>";
+
+        imageLoop.push(url);
       });
+
+      for (var i = 0; i < imageLoop.length; i++) {
+        // console.log(imageLoop[i]);
+        $('.slideshow').css('height', h).append(imageLoop[i]);
+           $('.slideshow').cycle({
+              fx: 'fade' // choose your transition type, ex: fade, scrollUp, shuffle, etc...
+          });
+      }
+      // console.log(imageLoop);
     }
   });
 };
 
-//https://farm8.staticflickr.com/7256/26795224544_34830daa02.jpg
+var getGenre = function(searchTerm) {
+  $('.genre-getter').submit(function(e) {
+    e.preventDefault();
+    var genreLiked = $('option:selected').text();
+    $('body').removeClass('background-image');
+    console.log('Search term: ' + searchTerm);
+    console.log('Genre: ' + genreLiked);
+    $('.genre-box').hide();
+
+    getMedia(searchTerm, genreLiked);
+  });
+};
 
 $(function() {
-  $(".search-form").submit(function(e) {
+  $('.search').submit(function(e) {
     e.preventDefault();
-    var searchTerm = $(".input").val();
-    console.log(searchTerm);
-    // add in-between page to get user to specify favorite genre listed in drop-down menu?
-    $(".container").hide();
-    $("body").removeClass('background-image');
-    getMedia(searchTerm);
+    var searchTerm = $(".search-term").val();
+    $('.container').hide();
+    $('.genre-box').show();
+
+    getGenre(searchTerm);
   });
 });

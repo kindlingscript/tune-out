@@ -1,12 +1,12 @@
-/*html {
-  margin: 0;
-  padding: 0;
+*, *:before, *:after {
   box-sizing: border-box;
-}*/
+}
 
 body {
+  background-color: #000;
   color: #fff;
   font-family: 'Muli', "Helvetica Neue", sans-serif;
+  font-size: 16px;
 }
 
 .background-image {
@@ -19,7 +19,7 @@ body {
   margin-top: 10%;
 }
 
-.input {
+.search-term {
   border: none;
   padding: 8px;
   border-radius: 5px;
@@ -27,40 +27,142 @@ body {
 }
 
 input[type="submit"] {
-  background: transparent;
   border: none;
-  font-size: 0;
+  background-color: #DC727A;
+  color: #fff;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+}
+
+input[type="submit"]:hover {
+  box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.4);
+  transform: translateY(-7px) scale(1.1);
+}
+
+input.search-term {
+  color: #000;
+}
+
+.next-line {
+  display: block;
+  margin: 20px auto;
+  color: #fff;
+  border-radius: 3px;
+  padding: 7px 35px;
+}
+
+.genre-h4 {
+  text-align: center;
+  margin-top: 40px;
 }
 
 h1 {
   font-size: 2.5em;
   margin-bottom: 0;
-  padding-right: 38%;
+  padding-right: ;
   color: #DC727A;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5), -1px 2px 4px #ED8F88;
 }
 
-h4 {
-  padding-right: 8%;
+.heading {
+  margin: 0 auto;
+  padding-left: 18%;
+  text-align: left;
+}
+
+h2 {
+  margin-top: 0;
+}
+
+.main-h4 {
   margin-top: 0.5em;
   font-weight: 300;
+  font-size: 1em;
 }
 
 input::-webkit-input-placeholder {
   font-size: 12px;
 }
 
+input:focus {
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
 .hidden {
   display: none;
 }
 
-.image-template {
-  background-color: #000;
-  padding-bottom: 200px;
+li {
+  color: #000;
+  padding-left: 10px;
 }
 
-.shown {
-  max-width: 75%;
+.slideshow img {
+  position: absolute;
+  margin: auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /*width: 90%;
+  margin: 5%;*/
+}
+
+.genre-box {
+  display: none;
+  position: fixed;
+  top: 35%;
+  left: 50%;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 1.5em 1em 3em 1.5em;
+  transform: translate(-50%, -50%);
+}
+
+.styled-select {
+  background: url(http://i62.tinypic.com/15xvbd5.png) no-repeat 96% 0;
+  height: 29px;
+  overflow: hidden;
+  width: 240px;
+}
+
+.styled-select select {
+  background: transparent;
+  border: none;
+  font-size: 14px;
+  height: 29px;
+  padding: 5px;
+  /* if you add too much padding here, the options won't show in IE */
+  width: 268px;
+}
+
+.semi-square {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+
+.white {
+  background-color: #fff;
+}
+
+.search {
+  padding: 0 18%;
   margin: 0 auto;
-  padding-top: 4rem;
+}
+
+.search-term {
+  width: 100%;
+}
+
+@media only screen and (max-width: 768px) {
+  .background-image {
+    background-position: 90% 30%;
+  }
+
+  .main-h4 {
+    padding-right: 5em;
+  }
 }
